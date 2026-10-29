@@ -1,0 +1,28 @@
+name: ExtraLog
+version: ${version}
+main: com.lonqon.extralog.ExtraLogPlugin
+api-version: '1.21'
+folia-supported: true
+author: Lonqon
+description: Server activity logging for Paper and Folia
+softdepend:
+  - floodgate
+
+commands:
+  extralog:
+    description: Manage ExtraLog
+    usage: /extralog <reload|vpncheck|vpnwhitelist|testwebhook>
+    aliases:
+      - elog
+    permission: extralog.admin
+
+permissions:
+  extralog.admin:
+    description: Access to ExtraLog administration commands
+    default: op
+  extralog.reload:
+    description: Reload ExtraLog configuration
+    default: op
+  extralog.viewip:
+    description: View unmasked IP addresses
+    default: op

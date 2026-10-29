@@ -1,0 +1,108 @@
+# ============================================================================
+# ExtraLog | Lonqon | MIT License | 1.x
+# Privacy-aware Minecraft activity logger
+# ============================================================================
+# Language files: plugins/ExtraLog/lang/en.yml and tr.yml
+# Run /extralog reload after changing settings.
+
+# Language for commands and Discord messages: en or tr
+language: en
+
+# If disabled, IPs are not written to any destination. Public masking applies only to general.
+ip-logging:
+  enabled: true
+  public-discord-mask: true
+
+# Optional player information to include in logs.
+log-details:
+  location: true       # world and xyz
+  gamemode: true       # game mode
+  ping: true           # ping
+  client-info: true    # client, version and platform
+  hostname: true       # hostname used to connect
+
+# Local logs are stored under plugins/ExtraLog/logs.
+# TEXT is human-readable; JSONL is suitable for machine processing.
+file-logging:
+  directory: logs
+  flush-interval-millis: 1000
+  queue-capacity: 10000
+  max-file-size-bytes: 10485760  # 0 = disable size rotation
+  format: TEXT                   # TEXT or JSONL
+  compress-old-logs: true        # compress old days to .log.gz
+  retention-days: 30             # 0 = disable automatic deletion
+
+# Events to log.
+events:
+  join: true
+  quit: true
+  player-commands: true
+  console-commands: true
+
+# argument-blacklist hides arguments; content-hidden also hides message content.
+# Command names are case-insensitive and plugin:command syntax is normalized.
+commands:
+  argument-blacklist:
+    - login
+    - l
+    - register
+    - reg
+    - password
+    - pass
+    - changepassword
+    - changepass
+    - unregister
+    - unreg
+  content-hidden:
+    - msg
+    - tell
+    - w
+    - r
+    - whisper
+
+# No network request is made while VPN checking is disabled.
+# When enabled, player IPs are sent to the selected third-party service.
+vpn-check:
+  enabled: false
+  provider: PROXYCHECK       # PROXYCHECK, IPHUB or IPQUALITYSCORE
+  api-key: ""
+  cache-days: 14
+  timeout-ms: 3000
+  whitelist-ips: []
+  whitelist-players: []
+  action: WARN               # Only WARN is supported for now
+
+# When webhook delivery is disabled, no webhook request is made.
+# The bot has its own switch below.
+# general: public events; IPs may be masked
+# staff: commands and staff events; full IP
+# security: VPN/proxy alerts; full IP
+discord:
+  enabled: true
+  webhooks:
+    general: ""   # public events
+    staff: ""     # staff events and commands
+    security: ""  # VPN/proxy alerts
+  # Route each event to one or more Discord channels.
+  routing:
+    join: [general, staff]
+    quit: [general]
+    player-commands: [staff]
+    console-commands: [staff]
+    vpn-suspected: [security, staff]
+  # Embed colors: green, gray, blue or orange
+  embed-colors:
+    join: green
+    quit: gray
+    command: blue
+    vpn: orange
+  server-name: "My Server"       # shown in Discord embeds and log headers
+  player-head-thumbnail: false   # add a player head image to player embeds
+  queue-capacity: 1000           # maximum pending Discord events
+  shutdown-timeout-ms: 5000      # queue flush time during shutdown
+  bot:
+    enabled: false               # enable the optional Discord bot
+    token: ""                    # keep this secret
+    guild-id: ""                 # empty = global slash commands
+    allowed-user-ids: []          # Discord user IDs allowed to use bot commands
+    allowed-role-ids: []          # Discord role IDs allowed to use bot commands
